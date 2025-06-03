@@ -1,0 +1,73 @@
+= Agenda Meeting 02: Common DNS Admin API
+:doctype: article
+:keywords: Common DNS Admin API
+:author: Patrick Ben Koetter
+:email: p@sys4.de
+:subject: Kickoff-Meeting
+:revnumber: 01
+:revdate: 2025-06-03
+:status: draft
+:copyright: (C) sys4 AG
+:publisher: sys4 AG
+:lang: en
+:hyphens: en
+:encoding: UTF-8
+:pdf-version: 1.7
+:toc:
+:toclevels: 3
+:sectnums:
+:pagenums:
+:icons: image
+:iconsdir: /etc/sys4/corporatedesign/icons
+:title-page:
+:source-highlighter: rouge
+:rouge-style: base16
+:pdf-theme: /etc/sys4/corporatedesign/sys4.yml
+:pdf-fontsdir: /etc/sys4/corporatedesign/fonts
+:asciidoctor-diagram:
+
+
+
+== API
+
+We need to agree what we want the API to do for us. OpenAPI has been mentioned
+as a best practice. I believe we should sit down and discuss what we want an
+API to provide to us, developers of API clients, ...?
+
+== Versioning
+
+Probably common ground but I'd like to agree on it explictly as it might become
+painful if we have different understandings how to tag versions. I do propose
+to follow Semantic Versioning 2.0.0 as described on https://semver.org.
+
+== Merging
+
+Do we want merging? What is it we would want from merging? Peer review to
+accieve better quality? …?
+
+== Roadmap
+
+Do we need a roadmap to get from v0 to v1?
+
+== Tasks
+
+We should create a list of tasks (issues) that will take our API from zero to
+version one.
+
+== Division of Work
+
+I believe we should divide work and we should assign the tasks to those who
+will work on them.
+
+== Additional benefit
+
+Peter said nsupdate has a not so nice protocol design. I'd like to hear him on
+that. A better protocol design might be a compelling reason for those using
+NSUPDATE to switch to our API. Adding one of our features to release v1.0 from
+our feature wishlist
+https://github.com/Common-DNS-Admin-API/dnsapi/blob/main/meetings/protocol-2025-05-16.adoc#feature-wishlist
+might be another good reason to start using our API. I'm thinking about adding
+additional benefit as I'd like to create a momentum for the public (developers,
+operators, …) to listen up and start following us as we offer either pain
+relief or an improved interface.
+
