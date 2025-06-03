@@ -4,6 +4,6 @@ This repo holds code to create a Common DNS Admin API and documentation about
 the API, how to use it as well as protocols from meetings, architectural
 decisions etc.
 
-.directory struture
+.Directory structure
 meetings/::
     Documentation like protocols or decisions.
