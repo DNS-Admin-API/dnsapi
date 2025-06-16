@@ -30,13 +30,13 @@ SPF      # RFC 7208: Obsolete
 WKS      # RFC 1127: Not recommended
 # RRTypes with no current use by any notable application
 # (see https://en.wikipedia.org/wiki/List_of_DNS_record_types)
-RP,
-ISDN,
-RT,
-X25,
-NSAP,
-NSAP_PTR,
-PX,
+RP
+ISDN
+RT
+X25
+NSAP
+NSAP_PTR
+PX
 TYPE0    # Reserved
 UNSPEC   # Reserved
 ....
