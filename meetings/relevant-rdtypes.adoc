@@ -1,0 +1,92 @@
+= Relevant DNS record types
+
+The basic set of RDTypes taken into consideration was the set provided by dnspython. It turned out that there were excessively many types and some were not used in practice at all.
+
+For that reason the following RDTypes were excluded from NetBox DNS record type pulldown menus by default:
+
+....
+# Obsolete or experimental RRTypes
+A6       # RFC 6563: Historic
+AFSDB    # RFC 5864: Obsolete
+APL      # RFC 3123: Experimental
+AVC      # https://www.iana.org/assignments/dns-parameters/AVC/avc-completed-template
+GPOS     # RFC 1712: Experimental
+KEY      # RFC 3755: Obsolete
+L32      # RFC 6742: Experimental
+L64      # RFC 6742: Experimental
+LP       # RFC 6742: Experimental
+MB       # RFC 2505: Unlikely to ever be adopted
+MD       # RFC 973: Obsolete
+MF       # RFC 973: Obsolete
+MG       # RFC 2505: Unlikely to ever be adopted
+MINFO    # RFC 2505: Unlikely to ever be adopted
+MR       # RFC 2505: Unlikely to ever be adopted
+NID      # RFC 6742: Experimental
+NINFO    # Application expired
+NULL     # RFC 1035: Obsolete
+NXT      # RFC 3755: Obsolete
+SIG      # RFC 3755: Obsolete
+SPF      # RFC 7208: Obsolete
+WKS      # RFC 1127: Not recommended
+# RRTypes with no current use by any notable application
+# (see https://en.wikipedia.org/wiki/List_of_DNS_record_types)
+RP
+ISDN
+RT
+X25
+NSAP
+NSAP_PTR
+PX
+TYPE0    # Reserved
+UNSPEC   # Reserved
+....
+
+That leaves the following list of record types to consider:
+
+....
+A
+AAAA
+AMTRELAY
+CAA
+CDNSKEY
+CDS
+CERT
+CNAME
+CSYNC
+DHCID
+DLV
+DNAME
+DNSKEY
+DS
+EUI48
+EUI64
+HINFO
+HIP
+HTTPS
+IPSECKEY
+KX
+LOC
+MX
+NAPTR
+NS
+NSEC
+NSEC3
+NSEC3PARAM
+OPENPGPKEY
+PTR
+RESINFO
+RRSIG
+SMIMEA
+SOA
+SRV
+SSHFP
+SVCB
+TA
+TLSA
+TXT
+URI
+WALLET
+ZONEMD
+....
+
+This list may still be a bit too long, but I think it can serve as a baseline to start from.
