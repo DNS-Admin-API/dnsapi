@@ -7,3 +7,5 @@ decisions etc.
 .Directory structure
 meetings/::
     Documentation like protocols or decisions.
+assets/::
+    Material we provide to ourselves
