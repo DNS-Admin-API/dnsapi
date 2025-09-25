@@ -1,0 +1,600 @@
+= DNS API Examples
+Carsten Strotmann <cs@sys4.de>
+
+==  List DNS records
+
+=== Cloudflare
+
+----
+curl https://api.cloudflare.com/client/v4/zones/$ZONE_ID/dns_records \
+    -H "X-Auth-Email: $CLOUDFLARE_EMAIL" \
+    -H "X-Auth-Key: $CLOUDFLARE_API_KEY"
+----
+
+----
+{
+  "errors": [
+    {
+      "code": 1000,
+      "message": "message",
+      "documentation_url": "documentation_url",
+      "source": {
+        "pointer": "pointer"
+      }
+    }
+  ],
+  "messages": [
+    {
+      "code": 1000,
+      "message": "message",
+      "documentation_url": "documentation_url",
+      "source": {
+        "pointer": "pointer"
+      }
+    }
+  ],
+  "success": true,
+  "result": [
+    {
+      "name": "example.com",
+      "ttl": 3600,
+      "type": "A",
+      "comment": "Domain verification record",
+      "content": "198.51.100.4",
+      "proxied": true,
+      "settings": {
+        "ipv4_only": true,
+        "ipv6_only": true
+      },
+      "tags": [
+        "owner:dns-team"
+      ],
+      "id": "023e105f4ecef8ad9ca31a8372d0c353",
+      "created_on": "2014-01-01T05:20:00.12345Z",
+      "meta": {},
+      "modified_on": "2014-01-01T05:20:00.12345Z",
+      "proxiable": true,
+      "comment_modified_on": "2024-01-01T05:20:00.12345Z",
+      "tags_modified_on": "2025-01-01T05:20:00.12345Z"
+    }
+  ],
+  "result_info": {
+    "count": 1,
+    "page": 1,
+    "per_page": 20,
+    "total_count": 2000
+  }
+}
+----
+
+
+=== IONOS
+
+----
+POST: /v1/zones/{zoneId}/records
+----
+
+----
+[
+  {
+    "name": "example-zone.de",
+    "type": "A",
+    "content": "1.2.3.4",
+    "ttl": 3600,
+    "prio": 0,
+    "disabled": false
+  }
+]
+----
+
+
+== deSEC
+
+----
+curl https://desec.io/api/v1/domains/{name}/rrsets/ \
+    --header "Authorization: Token {secret}"
+----
+
+
+=== Google
+
+----
+GET https://dns.googleapis.com/dns/v1/projects/{project}/managedZones/{managedZone}/rrsets
+----
+
+
+=== Azure
+
+----
+GET https://management.azure.com/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Network/dnsZones/{zoneName}/all?api-version=2018-05-01
+----
+
+
+=== GoDaddy
+
+----
+GET: /v1/domains/{domain}/records/[{type}/{name}]
+----
+
+
+== Read DNS record
+
+=== Cloudflare
+
+----
+curl https://api.cloudflare.com/client/v4/zones/$ZONE_ID/dns_records/$DNS_RECORD_ID \
+    -H "X-Auth-Email: $CLOUDFLARE_EMAIL" \
+    -H "X-Auth-Key: $CLOUDFLARE_API_KEY"
+----
+
+----
+{
+  "errors": [
+    {
+      "code": 1000,
+      "message": "message",
+      "documentation_url": "documentation_url",
+      "source": {
+        "pointer": "pointer"
+      }
+    }
+  ],
+  "messages": [
+    {
+      "code": 1000,
+      "message": "message",
+      "documentation_url": "documentation_url",
+      "source": {
+        "pointer": "pointer"
+      }
+    }
+  ],
+  "success": true,
+  "result": {
+    "name": "example.com",
+    "ttl": 3600,
+    "type": "A",
+    "comment": "Domain verification record",
+    "content": "198.51.100.4",
+    "proxied": true,
+    "settings": {
+      "ipv4_only": true,
+      "ipv6_only": true
+    },
+    "tags": [
+      "owner:dns-team"
+    ],
+    "id": "023e105f4ecef8ad9ca31a8372d0c353",
+    "created_on": "2014-01-01T05:20:00.12345Z",
+    "meta": {},
+    "modified_on": "2014-01-01T05:20:00.12345Z",
+    "proxiable": true,
+    "comment_modified_on": "2024-01-01T05:20:00.12345Z",
+    "tags_modified_on": "2025-01-01T05:20:00.12345Z"
+  }
+}
+----
+
+
+=== IONOS
+
+----
+GET: /v1/zones/{zoneId}/records/{recordId}
+----
+
+----
+{
+  "id": "22af3414-abbe-9e11-5df5-66fbe8e334b4",
+  "name": "example-zone.de",
+  "rootName": "example-zone.de",
+  "type": "A",
+  "content": "1.2.3.4",
+  "changeDate": "2019-12-09T13:04:25.772Z",
+  "ttl": 3600,
+  "prio": 0,
+  "disabled": false
+}
+----
+
+
+=== deSEC
+
+----
+curl https://desec.io/api/v1/domains/{name}/rrsets/{subname}/{type}/ \
+    --header "Authorization: Token {secret}"
+----
+ or (Apex)
+----
+curl https://desec.io/api/v1/domains/{name}/rrsets/@/{type}/ \
+    --header "Authorization: Token {secret}"
+----
+
+
+=== Google
+
+----
+GET https://dns.googleapis.com/dns/v1/projects/{project}/managedZones/{managedZone}/rrsets/{name}/{type}
+----
+
+----
+{
+  "name": string,
+  "type": string,
+  "ttl": integer,
+  "rrdatas": [
+    string
+  ],
+  "signatureRrdatas": [
+    string
+  ],
+  "routingPolicy": {
+    object (RRSetRoutingPolicy)
+  },
+  "kind": string
+}
+----
+
+
+=== Azure
+
+----
+GET https://management.azure.com/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Network/dnsZones/{zoneName}/{recordType}/{relativeRecordSetName}?api-version=2018-05-01
+----
+----
+{
+  "id": "/subscriptions/subid/resourceGroups/rg1/providers/Microsoft.Network/dnsZones/zone1/A/record1",
+  "etag": "00000000-0000-0000-0000-000000000000",
+  "name": "record1",
+  "type": "Microsoft.Network/dnsZones/A",
+  "properties": {
+    "metadata": {
+      "key1": "value1"
+    },
+    "TTL": 3600,
+    "fqdn": "record1.zone1",
+    "ARecords": [
+      {
+        "ipv4Address": "127.0.0.1"
+      }
+    ]
+  }
+----
+
+
+=== GoDaddy
+
+----
+GET: /v1/domains/{domain}/records/{type}/{name}
+----
+----
+[
+  {
+    "data": "string",
+    "name": "string",
+    "port": 65535,
+    "priority": 0,
+    "protocol": "string",
+    "service": "string",
+    "ttl": 0,
+    "type": "A",
+    "weight": 0
+  }
+]
+----
+
+
+== Create DNS record
+
+=== Cloudflare
+
+----
+curl https://api.cloudflare.com/client/v4/zones/$ZONE_ID/dns_records \
+    -H 'Content-Type: application/json' \
+    -H "X-Auth-Email: $CLOUDFLARE_EMAIL" \
+    -H "X-Auth-Key: $CLOUDFLARE_API_KEY" \
+    -d '{
+          "name": "example.com",
+          "ttl": 3600,
+          "type": "A",
+          "comment": "Domain verification record",
+          "content": "198.51.100.4",
+          "proxied": true
+        }'
+----
+
+
+=== IONOS
+
+----
+PUT:/v1/zones/{zoneId}/records/{recordId}
+----
+
+----
+{
+  "disabled": false,
+  "content": "1.1.1.1",
+  "ttl": 3600,
+  "prio": 0
+}
+----
+
+
+=== deSEC
+
+----
+curl https://desec.io/api/v1/domains/{name}/rrsets/ \
+    --header "Authorization: Token {secret}" \
+    --header "Content-Type: application/json" --data @- <<< \
+    '{"subname": "www", "type": "A", "ttl": 3600, "records": ["127.0.0.1", "127.0.0.2"]}'
+----
+
+
+=== Google
+
+----
+POST https://dns.googleapis.com/dns/v1/projects/{project}/managedZones/{managedZone}/rrsets
+----
+----
+#+begin_example
+{
+  "name": string,
+  "type": string,
+  "ttl": integer,
+  "rrdatas": [
+    string
+  ],
+  "signatureRrdatas": [
+    string
+  ],
+  "routingPolicy": {
+    object (RRSetRoutingPolicy)
+  },
+  "kind": string
+}
+----
+
+
+=== Azure
+
+----
+PUT https://management.azure.com/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Network/dnsZones/{zoneName}/{recordType}/{relativeRecordSetName}?api-version=2018-05-01
+----
+----
+ │
+{
+  "properties": {
+    "metadata": {
+      "key1": "value1"
+    },
+    "TTL": 3600,
+    "ARecords": [
+      {
+        "ipv4Address": "127.0.0.1"
+        }
+    ]
+  }
+}
+----
+
+
+=== GoDaddy
+
+----
+PUT: /v1/domains/{domain}/records/{type}/{name}
+----
+----
+[
+  {
+    "data": "string",
+    "port": 65535,
+    "priority": 0,
+    "protocol": "string",
+    "service": "string",
+    "ttl": 0,
+    "weight": 0
+  }
+]
+----
+
+
+== Delete DNS record
+
+=== Cloudflare
+
+----
+curl https://api.cloudflare.com/client/v4/zones/$ZONE_ID/dns_records/$DNS_RECORD_ID \
+    -X DELETE \
+    -H "X-Auth-Email: $CLOUDFLARE_EMAIL" \
+    -H "X-Auth-Key: $CLOUDFLARE_API_KEY"
+----
+
+
+=== IONOS
+
+----
+DELETE: /v1/zones/{zoneId}/records/{recordId}
+----
+
+----
+{
+  "disabled": false,
+  "content": "1.1.1.1",
+  "ttl": 3600,
+  "prio": 0
+}
+----
+
+
+=== deSEC
+
+----
+curl -X PATCH https://desec.io/api/v1/domains/{name}/rrsets/ \
+    --header "Authorization: Token {secret}" \
+    --header "Content-Type: application/json" --data @- <<EOF
+    [
+      {"subname": "www", "type": "A", "ttl": 3600, "records": ["1.2.3.4"]},
+      {"subname": "www", "type": "AAAA", "records": []}
+    ]
+EOF
+----
+
+
+=== Google
+
+----
+DELETE https://dns.googleapis.com/dns/v1/projects/{project}/managedZones/{managedZone}/rrsets/{name}/{type}
+----
+
+
+=== Azure
+
+----
+DELETE https://management.azure.com/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Network/dnsZones/{zoneName}/{recordType}/{relativeRecordSetName}?api-version=2018-05-01
+----
+
+
+=== GoDaddy
+
+----
+DELETE /v1/domains/{domain}/records/{type}/{name}
+----
+
+
+== Update DNS-Record
+
+=== Cloudflare
+
+----
+curl https://api.cloudflare.com/client/v4/zones/$ZONE_ID/dns_records/$DNS_RECORD_ID \
+    -X PATCH \
+    -H 'Content-Type: application/json' \
+    -H "X-Auth-Email: $CLOUDFLARE_EMAIL" \
+    -H "X-Auth-Key: $CLOUDFLARE_API_KEY" \
+    -d '{
+          "name": "example.com",
+          "ttl": 3600,
+          "type": "A",
+          "comment": "Domain verification record",
+          "content": "198.51.100.4",
+          "proxied": true
+        }'
+----
+
+
+=== IONOS
+
+ N/A
+
+
+=== deSEC
+
+----
+curl -X PUT https://desec.io/api/v1/domains/{name}/rrsets/{subname}/{type}/ \
+    --header "Authorization: Token {secret}" \
+    --header "Content-Type: application/json" --data @- <<EOF
+    {
+      "subname": "{subname}",
+      "type": "{type}",
+      "ttl": 3600,
+      "records": ["..."]
+    }
+EOF
+ │
+curl -X PATCH https://desec.io/api/v1/domains/{name}/rrsets/{subname}/{type}/ \
+    --header "Authorization: Token {secret}" \
+    --header "Content-Type: application/json" --data @- <<< \
+    '{"ttl": 86400}'
+----
+
+
+=== Google
+
+----
+DELETE https://dns.googleapis.com/dns/v1/projects/{project}/managedZones/{managedZone}/rrsets/{name}/{type}
+----
+----
+#+begin_example
+{
+  "name": string,
+  "type": string,
+  "ttl": integer,
+  "rrdatas": [
+    string
+  ],
+  "signatureRrdatas": [
+    string
+  ],
+  "routingPolicy": {
+    object (RRSetRoutingPolicy)
+  },
+  "kind": string
+}
+----
+
+
+=== Azure
+
+----
+PATCH https://management.azure.com/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Network/dnsZones/{zoneName}/{recordType}/{relativeRecordSetName}?api-version=2018-05-01
+----
+----
+{
+  "properties": {
+    "metadata": {
+      "key2": "value2"
+    }
+  }
+}
+----
+
+
+=== GoDaddy
+
+----
+PUT /v1/domains/{domain}/records/{type}/{name}
+----
+
+
+== Record Types
+
+=== Cloudflare
+
+ A NS SOA HINFO MX TXT AAAA LOC SRV NAPTR CERT SSHFP RRSIG NSEC DNSKEY
+ TLSA SMIMEA HIP CDS CDNSKEY OPENPGPKEY SVCB HTTPS URI CAA PTR
+
+
+=== deSEC
+
+ At least the following record types are supported: A, AAAA, AFSDB,
+ APL, CAA, CDNSKEY, CDS, CERT, CNAME, DHCID, DNAME, DNSKEY, DLV, DS,
+ EUI48, EUI64, HINFO, HTTPS, KX, L32, L64, LOC, LP, MX, NAPTR, NID, NS,
+ OPENPGPKEY, PTR, RP, SMIMEA, SPF, SRV, SSHFP, SVCB, TLSA, TXT, URI.
+ (The SOA record is managed automatically.)
+
+
+=== IONOS
+
+ A, AAAA, CNAME, MX, NS, SOA, SRV, TXT, CAA, TLSA, SMIMEA, SSHFP, DS,
+ HTTPS, SVCB, CERT, URI, RP, LOC, OPENPGPKEY
+
+
+=== Google
+
+ A AAAA ALIAS CAA CNAME DNSKEY DS HTTPS IPSECKEY MX NAPTR NS PTR SOA
+ SPF SRV SSHFP SVCB TLSA TXT
+
+
+=== Azure
+
+ A AAAA CAA CNAME MX NS PTR SOA SRV TXT
+
+
+=== GoDaddy
+
+ A, AAAA, CNAME, MX, NS, SOA, SRV, TXT
+
+
+=== DNSmadeEasy
+
+ A, AAAA, ANAME, CNAME, HTTPRED, MX, NS, PTR, SRV, TXT, SPF, or SOA
+
