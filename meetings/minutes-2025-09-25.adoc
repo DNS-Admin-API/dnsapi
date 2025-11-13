@@ -1,4 +1,4 @@
-= Protocol Meeting 03: Common DNS Admin API
+= Minutes from Meeting 03 (September 25th, 2025):Common DNS Admin API
 :doctype: article
 :keywords: Common DNS Admin API
 :author: Patrick Ben Koetter

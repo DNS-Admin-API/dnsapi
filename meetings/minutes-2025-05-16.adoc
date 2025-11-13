@@ -1,4 +1,4 @@
-= Kickoff-Meeting: Protocol
+= Minutes from Meeting 01 "Kickoff-Meeting" (May 16th, 2025):Common DNS Admin API
 :doctype: article
 :keywords: Common DNS Admin API
 :author: Patrick Ben Koetter
@@ -89,7 +89,7 @@ When asked or when appropriate we agreed to mention our project like this:
 
 == Next Steps
 
-* Read this protocol draft of our meeting and review it
+* Read the minutes draft of our meeting and review it
 * Develop a new agenda for the next meeting
 * Find a date for the next meeting
 
