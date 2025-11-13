@@ -1,0 +1,40 @@
+= Agenda Meeting 05 (December 11th, 2025): Common DNS Admin API
+:doctype: article
+:keywords: Common DNS Admin API
+:author: Patrick Ben Koetter
+:email: p@sys4.de
+:subject: Kickoff-Meeting
+:revnumber: 01
+:revdate: 2025-11-13
+:status: draft
+:copyright: (C) sys4 AG
+:publisher: sys4 AG
+:lang: en
+:hyphens: en
+:encoding: UTF-8
+:pdf-version: 1.7
+:toc:
+:toclevels: 3
+:sectnums:
+:pagenums:
+:icons: image
+:iconsdir: /etc/sys4/corporatedesign/icons
+:title-page:
+:source-highlighter: rouge
+:rouge-style: base16
+:pdf-theme: /etc/sys4/corporatedesign/sys4.yml
+:pdf-fontsdir: /etc/sys4/corporatedesign/fonts
+:asciidoctor-diagram:
+
+PowerDNS API::
+    Carsten will have a look at the API. He will specifically look for things
+    that he believes to be hard to understand. He will deliver his survey at the
+    meeting.
+Authentication::
+    Patrick will have a look into authentication and access control standards
+    and provide information to the group when we meet.
+PowerDNS API::
+    Peter (van Dijk) will also have a look at the API. He will specifically look
+    for things that could be better from his point of view. He will deliver his
+    survey at the meeting.
+
