@@ -62,7 +62,7 @@ provide.
   he believes to be hard to understand. He will deliver his survey by at least
   November 6th.
 * Peter (van Dijk) will also have a look at the API. He will specifically look
-  for things that could be better from hius point of view. He will deliver his
+  for things that could be better from his point of view. He will deliver his
   survey by at least November 6th.
 
 
