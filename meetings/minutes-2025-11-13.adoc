@@ -1,0 +1,81 @@
+= Minutes from Meeting 04 (November 13th, 2025):Common DNS Admin API
+:doctype: article
+:keywords: Common DNS Admin API
+:author: Patrick Ben Koetter
+:email: p@sys4.de
+:subject: Kickoff-Meeting
+:revnumber: 0.1
+:revdate: 2025-11-13
+:status: draft
+:copyright: (C) sys4 AG
+:publisher: sys4 AG
+:lang: en
+:hyphens: en
+:encoding: UTF-8
+:pdf-version: 1.7
+:toc:
+:toclevels: 3
+:sectnums:
+:pagenums:
+:icons: image
+:iconsdir: /etc/sys4/corporatedesign/icons
+:title-page:
+:source-highlighter: rouge
+:rouge-style: base16
+:pdf-theme: /etc/sys4/corporatedesign/sys4.yml
+:pdf-fontsdir: /etc/sys4/corporatedesign/fonts
+:asciidoctor-diagram:
+
+== ZONE, RR and RDATA Management
+
+There are management tasks that go beyond create, modify and delete i.e.
+enable/disable the record, expire the record on $DATE, xfr this zone and more.
+All of them seem to be very generic and common in all softwares; they don't
+address a specific software configuration option.
+
+Given the overall complexity and for the sake of focus on getting to version 1
+we agreed to collect such tasks and note them for evaluation once we have
+released version 1 of the API.
+
+== API Principles
+
+The API MUST NOT be smart. It might validate data at some time in the future,
+but it won't at the moment. If you provide bad / inaccurate data the API should
+accept it (see also:
+https://en.wikipedia.org/wiki/Garbage_in%2C_garbage_out[GIGO]).
+
+The API MUST NOT have logic. The API MUST NOT implement business logic, content
+logic or any other logic.
+
+No input validation. You cannot really validate a record without considering the
+context a record exists in (e.g. you cannot add a CNAME in the contect of a
+domains APEX). Therefore the API shouldn't try to validate the data it receives.
+
+== Error Messages
+
+The API SHOULD give meaningful error messages. The error message format SHOULD,
+if possible, stick close to 
+https://www.rfc-editor.org/rfc/rfc8914.html#name-extended-dns-error-edns0-op[Extended
+DNS Error EDNS0 Option Format^] as this is an established and know format (UX
+usability).
+
+== Next Meeting
+
+Our next meeting will take place on the 11th of December 2025 from 3 p.m. to
+4:30 p.m.
+
+* Carsten will have a look at the API. He will specifically look for things that
+  he believes to be hard to understand. He will deliver his survey at the
+  meeting.
+* Patrick will have a look into authentication and access control standards and
+  provide information to the group when we meet.
+* Peter (van Dijk) will also have a look at the API. He will specifically look
+  for things that could be better from his point of view. He will deliver his
+  survey at the meeting.
+
+== Next Steps
+
+* Read this protocol draft of our meeting and review it
+* Develop a new agenda for the next meeting
+
+
