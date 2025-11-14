@@ -51,6 +51,18 @@ No input validation. You cannot really validate a record without considering the
 context a record exists in (e.g. you cannot add a CNAME in the contect of a
 domains APEX). Therefore the API shouldn't try to validate the data it receives.
 
+PK> did we really have consensus on this? I must have been sleeping. I think we agreed that not every error case
+can be validated, but the API shall have a generic interface to communicate back on errors if these are detected.
+
+On the nsupdate analogy, I made a small test and even nsupdate makes syntax validation of the inputs:
+```
+% nsupdate
+> update add test.example.com 3600 A 257.1.1.1
+14-Nov-2025 09:19:44.254 dns_rdata_fromtext: buffer-0x16b5aed90:1: near '257.1.1.1': bad dotted quad
+invalid rdata format: bad dotted quad
+```
+I guess this is the minimum we should be doing.
+
 == Error Messages
 
 The API SHOULD give meaningful error messages. The error message format SHOULD,
