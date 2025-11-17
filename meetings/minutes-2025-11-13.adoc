@@ -39,17 +39,23 @@ released version 1 of the API.
 
 == API Principles
 
-The API MUST NOT be smart. It might validate data at some time in the future,
-but it won't at the moment. If you provide bad / inaccurate data the API should
-accept it (see also:
+The API SHOULD NOT be too smart.
+
+Specifically, we differentiate between input validation, and RR validation.
+Code paths to validate RRs already exist, and some validation can only be performed
+considering the context a record exists in. RR validation that already exists should
+be re-used.
+
+Input validation means validating API inputs before fully assembling RRs (when
+applicable) and understanding their context. The API MUST NOT require input validation
+of this kind, that is, any validation of this kind is currently an implementation
+detail.
+
+If you provide bad / inaccurate data the API should accept it (see also:
 https://en.wikipedia.org/wiki/Garbage_in%2C_garbage_out[GIGO]).
 
 The API MUST NOT have logic. The API MUST NOT implement business logic, content
 logic or any other logic.
-
-No input validation. You cannot really validate a record without considering the
-context a record exists in (e.g. you cannot add a CNAME in the contect of a
-domains APEX). Therefore the API shouldn't try to validate the data it receives.
 
 == Error Messages
 
