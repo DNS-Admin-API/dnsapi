@@ -41,20 +41,23 @@ released version 1 of the API.
 
 The API SHOULD NOT be too smart.
 
-Specifically, we differentiate between input validation, and RR validation.
-Code paths to validate RRs already exist, and some validation can only be performed
-considering the context a record exists in. RR validation that already exists should
-be re-used.
+Specifically, we differentiate between input syntax validation, and RR functional validation.
+Some validation can only be performed considering the context a record exists in therefore is not
+appropriate to be done on API level.
+API shall however perform input syntax validation which would assure that invalid inputs, which cannot
+even be transmitted to the server, will be rejected. API does not need to define
+very specific validation rules per RR type, but define error code points and payloads
+to communicate such failure to the client, leaving details to the implementation.
 
-Input validation means validating API inputs before fully assembling RRs (when
-applicable) and understanding their context. The API MUST NOT require input validation
+RR functional validation means not only validating API inputs before fully assembling RRs (when
+applicable) but also understanding their context. The API MUST NOT require validation
 of this kind, that is, any validation of this kind is currently an implementation
 detail.
 
-If you provide bad / inaccurate data the API should accept it (see also:
+Beyond what is stated above, if you provide bad / inaccurate data the API should accept it (see also:
 https://en.wikipedia.org/wiki/Garbage_in%2C_garbage_out[GIGO]).
 
-The API MUST NOT have logic. The API MUST NOT implement business logic, content
+The API MUST NOT define any specific logic beyond requests and responses. The API MUST NOT prescribe business logic, content
 logic or any other logic.
 
 == Error Messages
