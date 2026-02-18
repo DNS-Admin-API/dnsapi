@@ -1,0 +1,208 @@
+= Minutes from Meeting 02 (June 16th, 2025):Common DNS Admin API
+:doctype: article
+:keywords: Common DNS Admin API
+:author: Patrick Ben Koetter
+:email: p@sys4.de
+:subject: Kickoff-Meeting
+:revnumber: 01
+:revdate: 2025-06-16
+:status: draft
+:copyright: (C) sys4 AG
+:publisher: sys4 AG
+:lang: en
+:hyphens: en
+:encoding: UTF-8
+:pdf-version: 1.7
+:toc:
+:toclevels: 3
+:sectnums:
+:pagenums:
+:icons: image
+:iconsdir: /etc/sys4/corporatedesign/icons
+:title-page:
+:source-highlighter: rouge
+:rouge-style: base16
+:pdf-theme: /etc/sys4/corporatedesign/sys4.yml
+:pdf-fontsdir: /etc/sys4/corporatedesign/fonts
+:asciidoctor-diagram:
+
+
+
+== API
+
+Our project is in a stage of learning about APIs at the moment. Thus we are
+currently
+
+* looking into PowerDNS' existing API
+* collecting good and bad examples of DNS / ISP APIs.
+* taking a closer look at https://www.openapis.org[OpenAPI] as we believe it is
+  helpful to use it. It provides a framework for API documentation, can be seen
+  as a rapid development tool and it allows fast learning while we develop.
+
+
+At the moment we are gathering information.
+
+We need to agree what we want the API to do for us. OpenAPI has been mentioned
+as a best practice. I believe we should sit down and discuss what we want an
+API to provide to us, developers of API clients, ...?
+
+== REST API
+
+We plan to implement a REST API. This requires a HTTP-based webservice. Our plan
+is to use existing webservices - from Apache to caddy - and let them proxy the
+HTTP request to our DNS REST API.
+
+division of labor::
+    The webservice shall (at least) take care of authentication while the DNS
+    REST API handles authorization.
+data format::
+    Data sent to and returned from the webservice shall be
+    https://www.json.org/json-en.html[JSON].
+JSON for RRs::
+    We plan a two-tier approach - a generic JSON format for expressing DNS RRs
+    and specifig JSON format types representing specific DNS RRs. The specifity
+    allows to validate input and to check for constraints.
+
+    .Implementation order
+    ====
+    We will start with a generic JSON type as it allows to define any record.
+    But we will also deliver definitions for specific RRs. Out of the list of
+    about 100 RRs we will pick and implement those first that are most commonl
+    used and also such that come as long hanging fruits.
+    ====
+
+
+
+== Versioning
+
+We agree to version what we publish (software, documentation etc.) using the
+schema provided from https://semver.org. In a nutshell:
+
+[quote, https://semver.org]
+____
+Given a version number MAJOR.MINOR.PATCH, increment the:
+
+1. MAJOR version when you make incompatible API changes
+2. MINOR version when you add functionality in a backward compatible manner
+3. PATCH version when you make backward compatible bug fixes
+
+Additional labels for pre-release and build metadata are available as
+extensions to the MAJOR.MINOR.PATCH format.
+____
+
+
+== Merging
+
+We agree to use merge requests and reviews and only those having the role
++owner+ may push directly a projects `main` branch.
+
+
+== Roadmap
+
+We plan from iteration to iteration, which currently means from online meeting
+to online meeting. We do not try to provide a full roadmap of the project as we
+are unable to forsee everything we need to undertake while we get closer to the
+goal.
+
+
+== Tasks
+
+We will use tasks to keep an overview on what we need to do. Everyone can and
+may create tasks.
+
+
+== Division of Work
+
+We divide work and we sassign the tasks to those who will work on them.
+
+== Additional benefit
+
+Peter said nsupdate has a not so nice protocol design. I'd like to hear him on
+that. A better protocol design might be a compelling reason for those using
+NSUPDATE to switch to our API. Adding one of our features to release v1.0 from
+our feature wishlist
+https://github.com/Common-DNS-Admin-API/dnsapi/blob/main/meetings/protocol-2025-05-16.adoc#feature-wishlist
+might be another good reason to start using our API. I'm thinking about adding
+additional benefit as I'd like to create a momentum for the public (developers,
+operators, …) to listen up and start following us as we offer either pain
+relief or an improved interface.
+
+
+
+Peter van Dijk (PowerDNS)
+14:00
+
+habbie
+
+Petr Špaček (ISC)
+14:00
+
+pspacek
+
+Carsten Strotmann
+14:04
+
+Is there a website with the results?
+
+Peter van Dijk (PowerDNS)
+14:05
+
+btw, I need to leave at 14:45
+
+Peter van Dijk (PowerDNS)
+14:16
+
+https://github.com/sorz/nsupdate-web - t accepting HTTP requests and changing DNS records on BIND server with nsupdate (8).
+
+Peter van Dijk (PowerDNS)
+14:24
+
+and just for fun, the reverse - https://github.com/mjl-/dnsclay
+
+Patrick Ben Koetter
+14:26
+
+https://meet.opentalk.eu/room/09cb26e4-bdc6-4993-b277-9a7832804b1b?invite=8d180b76-963f-4eba-9ede-ce33bfe85e50
+
+Petr Špaček (ISC)
+14:28
+
+Facebook's HTTPS records as of now:
+
+1 . alpn="h2,h3"
+2 star-mini.fallback.c10r.facebook.com. alpn="h2,h3"
+
+Vicky (ISC)
+14:28
+
+just joined, but my camera doesn't work, sry
+
+Carsten Strotmann
+14:28
+
+TXT-Records ;)
+
+Petr Špaček (ISC)
+14:29
+
+List of known RR types: https://www.iana.org/assignments/dns-parameters/dns-parameters.xhtml#dns-parameters-4
+
+Peter van Dijk (PowerDNS)
+14:31
+
+random data point, this is what cloudflare appears to support A NS SOA HINFO MX TXT AAAA LOC SRV NAPTR CERT SSHFP RRSIG NSEC DNSKEY TLSA SMIMEA HIP CDS CDNSKEY OPENPGPKEY SVCB HTTPS URI CAA PTR
+
+Peter Eckel
+14:32
+
+https://github.com/peteeckel/netbox-plugin-dns/blob/main/netbox_dns/__init__.py
+
+Peter Eckel
+14:32
+
+Starting at line 34: https://github.com/peteeckel/netbox-plugin-dns/blob/main/netbox_dns/__init__.py
+
+Peter van Dijk (PowerDNS)
+14:39
+
+big collection of vendor-specific DNS API clients https://github.com/orgs/libdns/repositories?type=all

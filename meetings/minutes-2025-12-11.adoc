@@ -1,11 +1,11 @@
-= Minutes from Meeting 05 (December 11th, 2025):Common DNS Admin API
+= Minutes from Meeting 05 (December 11th, 2025): Common DNS Admin API
 :doctype: article
 :keywords: Common DNS Admin API
 :author: Patrick Ben Koetter
 :email: p@sys4.de
 :subject: Kickoff-Meeting
-:revnumber: 0.1
-:revdate: 2025-12-11
+:revnumber: 0.2
+:revdate: 2025-12-19
 :status: draft
 :copyright: (C) sys4 AG
 :publisher: sys4 AG
@@ -82,8 +82,12 @@ take comments and pull requests."
 == Meeting IRL
 
 We discussed the idea to meet in real life altogether at
-link:https://indico.dns-oarc.net/event/56/[OARRC 46^] in Edinburgh, Scotland on
-May 16-17th, 2026 and the overall reaction was to do this.
+link:https://ripe92.ripe.net/[RIPE 92^] in Edinburgh, from May 18 until 22nd
+2026, and the overall reaction was to do this.
+
+[NOTE]
+Carsten, Pete and Patrick will be there. They've already booked tickets, an
+appartment and everything else.
 
 
 == Next Meeting
@@ -91,8 +95,8 @@ May 16-17th, 2026 and the overall reaction was to do this.
 Our next meeting will take place on the 28th of January 2026 from 3 p.m. to
 4:30 p.m.
 
-* Carsten will present his API draft. Please take time to read the draft before
-  our meeting to allow for a productive atmosphere.
+Carsten will present his API draft. Please take time to read the draft before
+our meeting to allow for a productive atmosphere.
 
 
 == Next Steps
