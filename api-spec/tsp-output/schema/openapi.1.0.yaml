@@ -3,7 +3,183 @@ info:
   title: DNS-API
   version: '1.0'
 tags: []
-paths: {}
+paths:
+  /servers:
+    get:
+      operationId: servers_getZones
+      parameters: []
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Zone'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                serverid:
+                  type: string
+              required:
+                - serverid
+    post:
+      operationId: servers_createZone
+      parameters: []
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zone'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                serverid:
+                  type: string
+                domainname:
+                  type: string
+              required:
+                - serverid
+                - domainname
+  /servers/zones:
+    get:
+      operationId: zones_getZone
+      parameters: []
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zone'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                serverid:
+                  type: string
+                zoneid:
+                  type: string
+              required:
+                - serverid
+                - zoneid
+    delete:
+      operationId: zones_deleteZone
+      parameters: []
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zone'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                serverid:
+                  type: string
+                zoneid:
+                  type: string
+              required:
+                - serverid
+                - zoneid
+    patch:
+      operationId: zones_updateZone
+      parameters: []
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zone'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                serverid:
+                  type: string
+                zoneid:
+                  type: string
+                change:
+                  $ref: '#/components/schemas/RRSet'
+              required:
+                - serverid
+                - zoneid
+                - change
+    put:
+      operationId: zones_replaceZoneContent
+      parameters: []
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zone'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                serverid:
+                  type: string
+                zoneid:
+                  type: string
+                body:
+                  $ref: '#/components/schemas/Zone'
+              required:
+                - serverid
+                - zoneid
+                - body
+  /servers/zones/export:
+    get:
+      operationId: zones_getZoneAXFR
+      parameters: []
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            text/plain:
+              schema:
+                type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                serverid:
+                  type: string
+                zoneid:
+                  type: string
+              required:
+                - serverid
+                - zoneid
 components:
   schemas:
     Comment:
@@ -38,7 +214,7 @@ components:
           type: integer
           format: int32
         changetype:
-          type: string
+          $ref: '#/components/schemas/changetype'
         record:
           type: array
           items:
@@ -53,6 +229,23 @@ components:
         - data
       properties:
         data:
+          type: string
+    Server:
+      type: object
+      required:
+        - id
+        - type
+      properties:
+        id:
+          type: string
+        type:
+          $ref: '#/components/schemas/servertype'
+    ServerParameters:
+      type: object
+      required:
+        - serverid
+      properties:
+        serverid:
           type: string
     Versions:
       type: string
@@ -111,3 +304,28 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Extension'
+    ZoneParameters:
+      type: object
+      required:
+        - serverid
+        - zoneid
+      properties:
+        serverid:
+          type: string
+        zoneid:
+          type: string
+    changetype:
+      type: string
+      enum:
+        - replace
+        - add
+        - update
+        - delete
+    servertype:
+      type: string
+      enum:
+        - bind9
+        - knot
+        - nsd
+        - powerdns
+        - windows
