@@ -1,0 +1,113 @@
+openapi: 3.1.0
+info:
+  title: DNS-API
+  version: '1.0'
+tags: []
+paths: {}
+components:
+  schemas:
+    Comment:
+      type: object
+      required:
+        - text
+      properties:
+        text:
+          type: string
+    Extension:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+    RRSet:
+      type: object
+      required:
+        - name
+        - type
+        - ttl
+        - changetype
+        - record
+        - comments
+      properties:
+        name:
+          type: string
+        type:
+          type: string
+        ttl:
+          type: integer
+          format: int32
+        changetype:
+          type: string
+        record:
+          type: array
+          items:
+            $ref: '#/components/schemas/RecordData'
+        comments:
+          type: array
+          items:
+            $ref: '#/components/schemas/Comment'
+    RecordData:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: string
+    Versions:
+      type: string
+      enum:
+        - '1.0'
+    Zone:
+      type: object
+      required:
+        - id
+        - name
+        - type
+        - url
+        - kind
+        - rrsets
+        - serial
+        - notified_serial
+        - edited_serial
+        - primaries
+        - dnssec
+        - catalog
+        - extensions
+      properties:
+        id:
+          type: string
+          minLength: 2
+        name:
+          type: string
+        type:
+          type: string
+        url:
+          type: string
+        kind:
+          type: string
+        rrsets:
+          type: array
+          items:
+            $ref: '#/components/schemas/RRSet'
+        serial:
+          type: integer
+          format: int32
+        notified_serial:
+          type: integer
+          format: int32
+        edited_serial:
+          type: integer
+          format: int32
+        primaries:
+          type: array
+          items:
+            type: string
+        dnssec:
+          type: boolean
+        catalog:
+          type: string
+        extensions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Extension'
