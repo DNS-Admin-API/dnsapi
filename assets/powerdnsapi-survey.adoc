@@ -1,0 +1,82 @@
+=  =
+Carsten Strotmann
+:toc:
+
+Breakdown of main API functions for the intended scope of the generic DNS API version 1 (from https://doc.powerdns.com/authoritative/http-api/zone.html[https://doc.powerdns.com/authoritative/http-api/zone.html]):
+
+* List all Zones in a server `GET /servers/{server_id}/zones`
+* Creates a new domain, returns the Zone on creation `POST /servers/{server_id}/zones`
+* Get Zone managed by a server `GET /servers/{server_id}/zones/{zone_id}`
+* Deletes this zone, all attached metadata and rrsets = DELETE /servers/{server_id}/zones/{zone_id}=
+* Creates/modifies/deletes RRsets present in the payload and their comments. `PATCH /servers/{server_id}/zones/{zone_id}`
+* Modifies basic zone data `PUT /servers/{server_id}/zones/{zone_id}`
+* Returns the zone in AXFR format `GET /servers/{server_id}/zones/{zone_id}/export`
+
+Some (non-optional) properties of the objects used in the PowerDNS API are PowerDNS specific. I propose to move these to an extension structure inside the objects for features that are not present on all DNS server implementations.
+
+The proposed object properties on the `zone` object would be:
+
+* `id` (string) – Opaque zone id (string), assigned by the server,
+should not be interpreted by the application. Guaranteed to be safe
+for embedding in URLs.
+* `name` (string) – Name of the zone (e.g. “example.com.”) MUST have a trailing dot
+* `type` (string) – Set to “Zone”
+* `url` (string) – API endpoint for this zone
+* `kind` (string) – Zone kind, one of “Native”, “Primary”, “Secondary”, “Producer”, “Consumer”, "Forward" ...
+* `rrsets` ([RRSet]) – RRSets in this zone (for zones/{zone_id}
+endpoint only; omitted during GET on the …/zones list endpoint)
+* `serial` (integer) – The SOA serial number
+* `notified_serial` (integer) – The SOA serial notifications have been sent out for
+* `edited_serial` (integer) – The SOA serial as seen in query
+responses. Calculated using the SOA-EDIT metadata, default-soa-edit
+and default-soa-edit-signed settings
+* `primaries` ([string]) – List of IP addresses configured as a primary for this zone (“secondary” and "stub" type zones only)
+* `dnssec` (boolean) – Whether or not this zone is DNSSEC signed
+* catalog (string) – The catalog this zone is a member of
+* extensions ([extension]) - List of extensions (to be defined, might be implementation specific)
+
+Extension-Objects might want to have an *critical* property. If an *critical* property is set on an extension that is not supported by an implementation, the whole API transaction must fail. If all *ciritical* properties are implemented or no *ciritical* properties are given, the API call succeeds even if some properties cannot be applied (these are then ignored by the DNS server implementation. The API might return an object listing all ignored and or failed properties in the response).
+
+
+The proposed object properties on the `rrset` object would be (changetype "ADD" and "UPDATE" are added and don't exist in the PowerDNS API):
+
+* `name` (string) – Name for record set (e.g. “www.powerdns.com.”)
+* `type` (string) – Type of this record (e.g. “A”, “PTR”, “MX”)
+* `ttl` (integer) – DNS TTL of the records, in seconds. MUST NOT be
+included when changetype is set to “DELETE”.
+* `changetype` (string) – MUST be added when updating the RRSet. Must
+be REPLACE, ADD, UPDATE or DELETE.
+** With DELETE, all existing RRs matching name and type will be
+deleted, including all comments.
+** With ADD, all given records will be added to the zones RRset. If
+there are already records in the RRSet, the given records will be
+added. If there is an collision between existing records and the
+given records, the API call will fail. This function will not
+alter existing records in the RRset
+** With UPDATE, all given records will be added to the zones RRset.
+If there are already records in the RRSet, the given records will
+be added. If there is an collision between existing records and
+the given records, the existing records will be update. This
+function will alter existing records in the RRset
+** With REPLACE: when records is present, all existing RRs matching
+name and type will be deleted, and then new records given in
+records will be created. If no records are left, any existing
+comments will be deleted as well. When comments is present, all
+existing comments for the RRs matching name and type will be
+deleted, and then new comments given in comments will be created.
+* `record` ([Record]) – All records in this RRSet. When updating
+Records, this is the list of new records. Must be empty when
+changetype is set to DELETE. An empty list results in deletion of
+all records (and comments).
+* `comments` ([Comment]) – List of Comment. Must be empty when
+changetype is set to DELETE. An empty list results in deletion of
+all comments. modified_at is optional and defaults to the current
+server time.
+
+** RFC:
+
+* would the new changetypes work?
+* Can "TTL" and "comments" be ignored on DELETE instead of having
+the API requirement to have them empty?
+* Are missing properties interpreted as empty properties? Or default
+values?
