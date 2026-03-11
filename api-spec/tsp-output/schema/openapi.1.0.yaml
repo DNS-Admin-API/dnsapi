@@ -1,13 +1,18 @@
-openapi: 3.1.0
+openapi: 3.0.0
 info:
   title: DNS-API
   version: '1.0'
 tags: []
 paths:
-  /servers:
+  /servers/{serverid}:
     get:
       operationId: servers_getZones
-      parameters: []
+      parameters:
+        - name: serverid
+          in: path
+          required: true
+          schema:
+            type: string
       responses:
         '200':
           description: The request has succeeded.
@@ -17,23 +22,18 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Zone'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                serverid:
-                  type: string
-              required:
-                - serverid
+  /servers/{serverid}/zones:
     post:
-      operationId: servers_createZone
-      parameters: []
+      operationId: zones_createZone
+      parameters:
+        - name: serverid
+          in: path
+          required: true
+          schema:
+            type: string
       responses:
-        '200':
-          description: The request has succeeded.
+        '201':
+          description: Resource create operation completed successfully.
           content:
             application/json:
               schema:
@@ -43,19 +43,21 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                serverid:
-                  type: string
-                domainname:
-                  type: string
-              required:
-                - serverid
-                - domainname
-  /servers/zones:
+              $ref: '#/components/schemas/CreateZone'
+  /servers/{serverid}/zones/{zoneid}:
     get:
-      operationId: zones_getZone
-      parameters: []
+      operationId: zoneops_getZone
+      parameters:
+        - name: serverid
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: zoneid
+          in: path
+          required: true
+          schema:
+            type: string
       responses:
         '200':
           description: The request has succeeded.
@@ -63,23 +65,19 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Zone'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                serverid:
-                  type: string
-                zoneid:
-                  type: string
-              required:
-                - serverid
-                - zoneid
     delete:
-      operationId: zones_deleteZone
-      parameters: []
+      operationId: zoneops_deleteZone
+      parameters:
+        - name: serverid
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: zoneid
+          in: path
+          required: true
+          schema:
+            type: string
       responses:
         '200':
           description: The request has succeeded.
@@ -87,23 +85,19 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Zone'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                serverid:
-                  type: string
-                zoneid:
-                  type: string
-              required:
-                - serverid
-                - zoneid
     patch:
-      operationId: zones_updateZone
-      parameters: []
+      operationId: zoneops_updateZone
+      parameters:
+        - name: serverid
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: zoneid
+          in: path
+          required: true
+          schema:
+            type: string
       responses:
         '200':
           description: The request has succeeded.
@@ -116,21 +110,20 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                serverid:
-                  type: string
-                zoneid:
-                  type: string
-                change:
-                  $ref: '#/components/schemas/RRSet'
-              required:
-                - serverid
-                - zoneid
-                - change
+              $ref: '#/components/schemas/RRSetChange'
     put:
-      operationId: zones_replaceZoneContent
-      parameters: []
+      operationId: zoneops_replaceZoneContent
+      parameters:
+        - name: serverid
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: zoneid
+          in: path
+          required: true
+          schema:
+            type: string
       responses:
         '200':
           description: The request has succeeded.
@@ -143,22 +136,21 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                serverid:
-                  type: string
-                zoneid:
-                  type: string
-                body:
-                  $ref: '#/components/schemas/Zone'
-              required:
-                - serverid
-                - zoneid
-                - body
-  /servers/zones/export:
+              $ref: '#/components/schemas/UpdateZone'
+  /servers/{serverid}/zones/{zoneid}/export:
     get:
-      operationId: zones_getZoneAXFR
-      parameters: []
+      operationId: zoneops_getZoneAXFR
+      parameters:
+        - name: serverid
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: zoneid
+          in: path
+          required: true
+          schema:
+            type: string
       responses:
         '200':
           description: The request has succeeded.
@@ -166,20 +158,29 @@ paths:
             text/plain:
               schema:
                 type: string
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                serverid:
-                  type: string
-                zoneid:
-                  type: string
-              required:
-                - serverid
-                - zoneid
+  /servers/{serverid}/zones/{zoneid}/rrsets:
+    get:
+      operationId: zoneops_getZoneRRSets
+      parameters:
+        - name: serverid
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: zoneid
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RRSet'
 components:
   schemas:
     Comment:
@@ -189,6 +190,60 @@ components:
       properties:
         text:
           type: string
+    CreateZone:
+      type: object
+      required:
+        - id
+        - name
+        - type
+        - url
+        - kind
+        - rrsets
+        - serial
+        - notified_serial
+        - edited_serial
+        - primaries
+        - dnssec
+        - catalog
+        - extensions
+      properties:
+        id:
+          type: string
+          minLength: 2
+        name:
+          type: string
+        type:
+          type: string
+        url:
+          type: string
+        kind:
+          type: string
+        rrsets:
+          type: array
+          items:
+            $ref: '#/components/schemas/RRSet'
+        serial:
+          type: integer
+          format: int32
+        notified_serial:
+          type: integer
+          format: int32
+        edited_serial:
+          type: integer
+          format: int32
+        primaries:
+          type: array
+          items:
+            type: string
+        dnssec:
+          type: boolean
+        catalog:
+          type: string
+        extensions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Extension'
+      description: ''
     Extension:
       type: object
       required:
@@ -202,7 +257,6 @@ components:
         - name
         - type
         - ttl
-        - changetype
         - record
         - comments
       properties:
@@ -213,8 +267,6 @@ components:
         ttl:
           type: integer
           format: int32
-        changetype:
-          $ref: '#/components/schemas/changetype'
         record:
           type: array
           items:
@@ -223,6 +275,15 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Comment'
+    RRSetChange:
+      type: object
+      required:
+        - changetype
+      properties:
+        changetype:
+          $ref: '#/components/schemas/changetype'
+      allOf:
+        - $ref: '#/components/schemas/RRSet'
     RecordData:
       type: object
       required:
@@ -247,6 +308,53 @@ components:
       properties:
         serverid:
           type: string
+    UpdateZone:
+      type: object
+      required:
+        - type
+        - url
+        - kind
+        - rrsets
+        - serial
+        - notified_serial
+        - edited_serial
+        - primaries
+        - dnssec
+        - catalog
+        - extensions
+      properties:
+        type:
+          type: string
+        url:
+          type: string
+        kind:
+          type: string
+        rrsets:
+          type: array
+          items:
+            $ref: '#/components/schemas/RRSet'
+        serial:
+          type: integer
+          format: int32
+        notified_serial:
+          type: integer
+          format: int32
+        edited_serial:
+          type: integer
+          format: int32
+        primaries:
+          type: array
+          items:
+            type: string
+        dnssec:
+          type: boolean
+        catalog:
+          type: string
+        extensions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Extension'
+      description: ''
     Versions:
       type: string
       enum:

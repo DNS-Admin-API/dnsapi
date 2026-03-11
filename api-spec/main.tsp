@@ -5,6 +5,7 @@ import "@typespec/versioning";
 
 using Http;
 using Rest;
+using Rest.Resource;
 using Versioning;
 
 @service(#{ title: "DNS-API" })
@@ -48,9 +49,12 @@ namespace DnsApi {
         name: string;
         type: string;
         ttl: int32;
-        changetype: changetype;
         record: RecordData[];
         comments: Comment[];
+    }
+
+    model RRSetChange extends RRSet {
+        changetype: changetype;        
     }
 
     model Extension {
@@ -58,8 +62,11 @@ namespace DnsApi {
     }
 
     model Zone {
+        @key
         @minLength(2)
+        @visibility(Lifecycle.Read, Lifecycle.Create)
         id: string;
+        @visibility(Lifecycle.Read, Lifecycle.Create)
         name: string;
         type: string;
         url: string;
@@ -74,12 +81,14 @@ namespace DnsApi {
         extensions: Extension[];
     }
 
+    // not used
     model ServerParameters {
         @path
         @segment("servers")
         serverid: string;
     }
 
+    // not used
     model ZoneParameters {
         @path
         @segment("servers")
@@ -90,18 +99,23 @@ namespace DnsApi {
         zoneid: string;
     }
 
-    @route("/servers")
+    @route("/servers/{serverid}")
     namespace servers {
         @get op getZones(serverid: string): Zone[];
-        @post op createZone(serverid: string, domainname: string): Zone;
         @route("/zones")
         namespace zones {
-            @get op getZone(serverid: string, zoneid: string): Zone;
-            @delete op deleteZone(serverid: string, zoneid: string): Zone;
-            @patch op updateZone(serverid: string, zoneid: string, change: RRSet): Zone;
-            @put op replaceZoneContent(serverid: string, zoneid: string, body: Zone): Zone;
-            @route("/export")
-            @get op getZoneAXFR(serverid: string, zoneid: string): string;
+            @post op createZone(serverid: string, @body body: Create<Zone>): ResourceCreatedResponse<Zone>;
+            @route("/{zoneid}")
+            namespace zoneops {
+                @get op getZone(serverid: string, zoneid: string): Zone;
+                @route("/rrsets")
+                @get op getZoneRRSets(serverid: string, zoneid: string): RRSet[];
+                @delete op deleteZone(serverid: string, zoneid: string): Zone;
+                @patch(#{ implicitOptionality: false }) op updateZone(serverid: string, zoneid: string, @body change: RRSetChange): Zone;
+                @put op replaceZoneContent(serverid: string, zoneid: string, @body body: Update<Zone>): Zone;
+                @route("/export")
+                @get op getZoneAXFR(serverid: string, zoneid: string): string;
+            }
         }
     }
 }
